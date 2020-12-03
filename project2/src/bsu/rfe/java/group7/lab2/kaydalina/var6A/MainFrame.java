@@ -40,6 +40,35 @@ public class MainFrame extends JFrame {
     private Box hboxFormulaType = Box.createHorizontalBox();
     private int formulaId = 1;
 
+    // Формула №1 для рассчѐта
+    public Double calculate1(Double x, Double y, Double z) {
+        if (x == 0) {
+            JOptionPane.showMessageDialog(MainFrame.this,
+                    "X не может равняться 0", " " +
+                            "Ошибка ввода", JOptionPane.WARNING_MESSAGE);
+            return 0.0;
+        }
+
+        if (z == -1) {
+            JOptionPane.showMessageDialog(MainFrame.this,
+                    "Z не может равняться -1", " " +
+                            "Ошибка ввода", JOptionPane.WARNING_MESSAGE);
+            return 0.0;
+        }
+        return Math.pow((Math.cos(Math.pow(Math.E, y)) + Math.pow(Math.E, y * y) + Math.sqrt(1/x)), 0.25) /
+                Math.pow((Math.cos(Math.PI * z * z * z) + Math.log((1 + z) * (1 + z))), Math.sin(y));
+    }
+    // Формула №2 для рассчѐта
+    public Double calculate2(Double x, Double y, Double z) {
+        if (x == -1) {
+            JOptionPane.showMessageDialog(MainFrame.this,
+                    "X не может равняться -1", "" +
+                            "Ошибка ввода", JOptionPane.WARNING_MESSAGE);
+            return 0.0;
+        }
+        return (1 + Math.pow(x, z) + Math.log(y * y)) * (1 - Math.sin(y * z)) / Math.sqrt(x * x * x + 1);
+    }
+
     // Вспомогательный метод для добавления кнопок на панель
     private void addRadioButton(String buttonName, final int formulaId) {
         JRadioButton button = new JRadioButton(buttonName);
@@ -109,11 +138,44 @@ public class MainFrame extends JFrame {
         JButton buttonCalc = new JButton("Вычислить");
         buttonCalc.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
+                try {
+                    Double x = Double.parseDouble(textFieldX.getText());
+                    Double y = Double.parseDouble(textFieldY.getText());
+                    Double z = Double.parseDouble(textFieldZ.getText());
+
+                    if (formulaId==1)
+                        SUM += calculate1(x, y, z);
+                    else
+                        SUM += calculate2(x, y, z);
+                    textFieldResult.setText(Double.toString(SUM));
+                }
+                catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(MainFrame.this,
+                            "Ошибка в формате записи числа с плавающей точкой", "Ошибочный формат числа",
+                            JOptionPane.WARNING_MESSAGE);
+                }
             }
         });
         JButton buttonSum = new JButton("M+");
         buttonSum.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev){
+                try {
+                    Double x = Double.parseDouble(textFieldX.getText());
+                    Double y = Double.parseDouble(textFieldY.getText());
+                    Double z = Double.parseDouble(textFieldZ.getText());
+
+                    if (formulaId==1)
+                        SUM += calculate1(x, y, z);
+                    else
+                        SUM += calculate2(x, y, z);
+                    textFieldResult.setText(Double.toString(SUM));
+                }
+                catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(MainFrame.this,
+                            "Ошибка в формате записи числа с плавающей точкой", "Ошибочный формат числа",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+
             }
         });
         JButton buttonClearSum = new JButton("MC");
